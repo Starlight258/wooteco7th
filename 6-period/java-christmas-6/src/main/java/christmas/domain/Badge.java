@@ -24,13 +24,9 @@ public enum Badge {
         Arrays.sort(values, (v1, v2) -> v2.atLeastPrice.compareTo(v1.atLeastPrice));
         for (Badge badge : values) {
             if (atLeastPrice.compareTo(badge.atLeastPrice) >= 0) {
-                return badge.getName();
+                return badge.name();
             }
         }
         return NONE;
-    }
-
-    public String getName() {
-        return name;
     }
 }
