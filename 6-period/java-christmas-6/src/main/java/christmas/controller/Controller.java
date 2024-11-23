@@ -9,6 +9,7 @@ import christmas.domain.Orders;
 import christmas.domain.PromotionProcessor;
 import christmas.domain.Quantity;
 import christmas.exception.CustomIllegalArgumentException;
+import christmas.exception.ExceptionHandler;
 import christmas.support.StringFormatter;
 import christmas.util.Converter;
 import christmas.view.InputView;
@@ -30,11 +31,14 @@ public class Controller {
     private final InputView inputView;
     private final OutputView outputView;
     private final StringFormatter stringFormatter;
+    private final ExceptionHandler exceptionHandler;
 
-    public Controller(final InputView inputView, final OutputView outputView, final StringFormatter stringFormatter) {
+    public Controller(final InputView inputView, final OutputView outputView, final StringFormatter stringFormatter,
+                      final ExceptionHandler exceptionHandler) {
         this.inputView = inputView;
         this.outputView = outputView;
         this.stringFormatter = stringFormatter;
+        this.exceptionHandler = exceptionHandler;
     }
 
     public void process() {
@@ -64,12 +68,13 @@ public class Controller {
         outputView.showMessage(
                 stringFormatter.makePromotionListMessage(untilChristmasDiscount, dayDiscount, specialDiscount,
                         giftDiscount, visitDay, noPromotion));
-        showTotalDiscount(promotionProcessor, noPromotion, untilChristmasDiscount, dayDiscount, specialDiscount, giftDiscount);
+        showTotalDiscount(promotionProcessor, noPromotion, untilChristmasDiscount, dayDiscount, specialDiscount,
+                giftDiscount);
     }
 
     private void showTotalDiscount(final PromotionProcessor promotionProcessor, final boolean noPromotion,
-                           final BigDecimal untilChristmasDiscount, final BigDecimal dayDiscount,
-                           final BigDecimal specialDiscount, final BigDecimal giftDiscount) {
+                                   final BigDecimal untilChristmasDiscount, final BigDecimal dayDiscount,
+                                   final BigDecimal specialDiscount, final BigDecimal giftDiscount) {
         BigDecimal totalDiscount = addTotalDiscount(untilChristmasDiscount, dayDiscount, specialDiscount, giftDiscount,
                 noPromotion);
         BigDecimal discountPriceExceptBonusPrice = totalDiscount.subtract(giftDiscount);
@@ -92,12 +97,14 @@ public class Controller {
 
     private Orders createOrders() {
         outputView.commentOrderMenu();
-        String input = inputView.readLine();
-        Orders orders = new Orders(new ArrayList<>());
-        for (String order : input.split(COMMA)) {
-            validateOrder(orders, order.trim());
-        }
-        return orders;
+        return exceptionHandler.retryOn(() -> {
+            String input = inputView.readLine();
+            Orders orders = new Orders(new ArrayList<>());
+            for (String order : input.split(COMMA)) {
+                validateOrder(orders, order.trim());
+            }
+            return orders;
+        });
     }
 
     private void validateOrder(final Orders orders, final String order) {
@@ -115,10 +122,13 @@ public class Controller {
     }
 
     private Day createDay() {
-        outputView.commentVisitDate();
-        String day = inputView.readLine();
-        return new Day(YEAR, DECEMBER, Converter.convertToInteger(day));
+        return exceptionHandler.retryOn(() -> {
+            outputView.commentVisitDate();
+            String day = inputView.readLine();
+            return new Day(YEAR, DECEMBER, Converter.convertToInteger(day));
+        });
     }
+
 
     private void showOrders(final Orders orders, final Day day) {
         outputView.commentEvent(day.getValue());
