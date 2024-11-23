@@ -4,11 +4,8 @@ public enum ErrorMessage {
 
     ERROR_PREFIX("[ERROR] "),
 
-    NULL("인자 값은 null일 수 없습니다."),
-    BLANK("인자 값은 비어있거나 공백일 수 없습니다."),
-    EMPTY("인자 값은 빈 문자열일 수 없습니다."),
-    NULL_OR_BLANK("인자 값은 null이거나 공백일 수 없습니다"),
-    NULL_OR_EMPTY("인자 값은 null이거나 비어있을 수 없습니다"),
+    NULL("입력값은(는) null일 수 없습니다."),
+    BLANK("입력값은(는) 빈 문자열이거나 공백일 수 없습니다."),
 
     NOT_A_NUMBER("숫자만 입력할 수 있습니다."),
 
