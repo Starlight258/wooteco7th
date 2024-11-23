@@ -139,10 +139,6 @@ public enum Discount {
         return endDate;
     }
 
-    public String getDiscountName() {
-        return discountName;
-    }
-
     protected static boolean isWeekend(LocalDate date) {
         DayOfWeek dayOfWeek = date.getDayOfWeek();
         return dayOfWeek == DayOfWeek.FRIDAY || dayOfWeek == DayOfWeek.SATURDAY;
@@ -152,7 +148,7 @@ public enum Discount {
     private static boolean isValidDateTIme(LocalDate today, LocalDate startDate, LocalDate endDate) {
         int compareStartDate = today.compareTo(startDate);
         int compareEndDate = today.compareTo(endDate);
-        if (compareStartDate >= 0 && compareEndDate <= 0) {
+        if (compareStartDate >= 0 && compareEndDate >= 0) {
             return true;
         }
         return false;
