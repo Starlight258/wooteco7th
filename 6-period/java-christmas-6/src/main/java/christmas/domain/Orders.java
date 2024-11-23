@@ -27,14 +27,12 @@ public class Orders {
         orders.add(addedOrder);
     }
 
-    public void checkOnlyDrinks() {
+    public boolean checkOnlyDrinks() {
         Set<MenuType> menus = new HashSet<>();
         for (Order order : orders) {
             menus.add(order.getMenu().getType());
         }
-        if (menus.size() == 1 && menus.contains(MenuType.DRINK)) {
-            throw new CustomIllegalArgumentException(ErrorMessage.INVALID_ORDER.getMessage());
-        }
+        return menus.size() == 1 && menus.contains(MenuType.DRINK);
     }
 
     public int countSameTypeMenu(MenuType menuType) {

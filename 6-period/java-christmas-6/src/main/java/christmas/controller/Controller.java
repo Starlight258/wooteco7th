@@ -9,6 +9,7 @@ import christmas.domain.Orders;
 import christmas.domain.PromotionProcessor;
 import christmas.domain.Quantity;
 import christmas.exception.CustomIllegalArgumentException;
+import christmas.exception.ErrorMessage;
 import christmas.exception.ExceptionHandler;
 import christmas.support.StringFormatter;
 import christmas.util.Converter;
@@ -118,7 +119,9 @@ public class Controller {
             Quantity quantity = new Quantity(Converter.convertToInteger(matcher.group(2)));
             orders.add(new Order(menu, quantity));
         }
-        orders.checkOnlyDrinks();
+        if (orders.checkOnlyDrinks()) {
+            throw new CustomIllegalArgumentException(ErrorMessage.INVALID_ORDER.getMessage());
+        }
     }
 
     private Day createDay() {
