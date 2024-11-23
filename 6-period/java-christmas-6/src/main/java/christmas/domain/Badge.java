@@ -9,6 +9,8 @@ public enum Badge {
     토끼("토끼", new BigDecimal(10000)),
     산타("산타", new BigDecimal(20000));
 
+    public static final String NONE = "없음";
+
     private final String name;
     private final BigDecimal atLeastPrice;
 
@@ -25,7 +27,7 @@ public enum Badge {
                 return badge.getName();
             }
         }
-        return "";
+        return NONE;
     }
 
     public String getName() {
