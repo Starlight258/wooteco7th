@@ -15,10 +15,13 @@ public class PromotionProcessor {
     }
 
     public boolean checkAtLeastPrice() {
-        return orders.calculateTotalPrice().compareTo(new BigDecimal(10000)) >= 0;
+        return orders.calculateTotalPrice().compareTo(new BigDecimal(10_000)) >= 0;
     }
 
-    public BigDecimal checkUntiChristmasDiscount() {
+    public BigDecimal checkUntilChristmasDiscount() {
+        if (visitDay.isExceedChristmas()) {
+            return BigDecimal.ZERO;
+        }
         BigDecimal discount = BigDecimal.valueOf(1000);
         BigDecimal untilChristmas = new BigDecimal(100).multiply(new BigDecimal(visitDay.diffFromFirstDay()));
         return discount.add(untilChristmas);

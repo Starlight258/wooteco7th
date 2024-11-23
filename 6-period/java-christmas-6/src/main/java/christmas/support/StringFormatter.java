@@ -35,14 +35,14 @@ public class StringFormatter {
     public String makePromotionListMessage(final BigDecimal untilChristmasDiscount, final BigDecimal dayDiscount,
                                            final BigDecimal specialDiscount, final BigDecimal giftDiscount,
                                            final Day visitDay, final Boolean noPromotion) {
-        if (noPromotion) {
-            return NONE;
-        }
         String message = "";
-        message += String.format("크리스마스 디데이 할인: -%,.0f원\n", untilChristmasDiscount);
+        message += showChristmasDday(untilChristmasDiscount);
         message += showDayDiscount(visitDay, dayDiscount);
         message += makeSpecialDiscountMessage(specialDiscount);
         message += makeGiftDiscountMessage(giftDiscount);
+        if (noPromotion || message.isEmpty()) {
+            return NONE;
+        }
         return message;
     }
 
@@ -105,6 +105,12 @@ public class StringFormatter {
         return String.format("%,.0f원\n", value);
     }
 
+    private String showChristmasDday(final BigDecimal untilChristmasDiscount) {
+        if (untilChristmasDiscount.equals(BigDecimal.ZERO)) {
+            return "";
+        }
+        return String.format("크리스마스 디데이 할인: -%,.0f원\n", untilChristmasDiscount);
+    }
 
     private String showDayDiscount(final Day visitDay, final BigDecimal dayDiscount) {
         if (dayDiscount.equals(BigDecimal.ZERO)) {

@@ -7,20 +7,25 @@ import java.time.LocalDate;
 
 public class Day {
 
+    private final int year;
+    private final int month;
+
     private final int value;
 
-    public Day(final int value) {
+    public Day(final int year, final int month, final int value) {
         validate(value);
+        this.year = year;
+        this.month = month;
         this.value = value;
     }
 
     public boolean isWeekend() {
-        LocalDate now = LocalDate.of(2023, 12, value);
+        LocalDate now = LocalDate.of(year, month, value);
         return now.getDayOfWeek().equals(DayOfWeek.FRIDAY) || now.getDayOfWeek().equals(DayOfWeek.SATURDAY);
     }
 
     public boolean isSpecialDay() {
-        LocalDate now = LocalDate.of(2023, 12, value);
+        LocalDate now = LocalDate.of(year, month, value);
         return now.getDayOfWeek().equals(DayOfWeek.SUNDAY) || value == 25;
     }
 
@@ -34,15 +39,11 @@ public class Day {
         return value - 1;
     }
 
-    public Day add(Day day) {
-        return new Day(value + day.value);
-    }
-
-    public Day subtract(Day day) {
-        return new Day(value - day.value);
-    }
-
     public int getValue() {
         return value;
+    }
+
+    public boolean isExceedChristmas() {
+        return value > 25;
     }
 }
