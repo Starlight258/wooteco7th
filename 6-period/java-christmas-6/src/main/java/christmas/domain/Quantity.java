@@ -13,7 +13,7 @@ public class Quantity {
     }
 
     private void validate(final int value) {
-        if (value < 1) {
+        if (value < 1 || value > 20) {
             throw new CustomIllegalArgumentException(ErrorMessage.INVALID_ORDER.getMessage());
         }
     }

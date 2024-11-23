@@ -6,7 +6,9 @@ import christmas.exception.ErrorMessage;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Orders {
 
@@ -23,6 +25,16 @@ public class Orders {
             }
         }
         orders.add(addedOrder);
+    }
+
+    public void checkOnlyDrinks() {
+        Set<MenuType> menus = new HashSet<>();
+        for (Order order : orders) {
+            menus.add(order.getMenu().getType());
+        }
+        if (menus.size() == 1 && menus.contains(MenuType.DRINK)) {
+            throw new CustomIllegalArgumentException(ErrorMessage.INVALID_ORDER.getMessage());
+        }
     }
 
     public int countSameTypeMenu(MenuType menuType) {
