@@ -16,24 +16,20 @@ public class StringFormatter {
     public static final String NONE = "없음" + System.lineSeparator();
     public static final String ZERO_PRICE = "0원" + System.lineSeparator();
 
-    public String makeMessage(final Orders orders) {
+    public String makeOptionalOrderMessage(final Orders orders) {
         StringBuilder message = new StringBuilder();
         for (Order order : orders.getOrders()) {
-            message.append(makeOrderMessage(order));
+            message.append(makeOptionalOrderMessage(order));
         }
         return message.toString();
     }
 
-    public String makeMessage(final Optional<Order> optionalOrder) {
+    public String makeOptionalOrderMessage(final Optional<Order> optionalOrder) {
         if (optionalOrder.isEmpty()) {
             return NONE;
         }
         Order order = optionalOrder.get();
-        return makeOrderMessage(order);
-    }
-
-    private String makeOrderMessage(final Order order) {
-        return String.format(FORMAT, order.getMenu().getName(), order.getQuantity().getValue());
+        return makeOptionalOrderMessage(order);
     }
 
     public String makePromotionListMessage(final BigDecimal untilChristmasDiscount, final BigDecimal dayDiscount,
@@ -45,12 +41,12 @@ public class StringFormatter {
         String message = "";
         message += String.format("크리스마스 디데이 할인: -%,.0f원\n", untilChristmasDiscount);
         message += showDayDiscount(visitDay, dayDiscount);
-        message += String.format("특별 할인: -%,.0f원\n", specialDiscount);
+        message += makeSpecialDiscountMessage(specialDiscount);
         message += makeGiftDiscountMessage(giftDiscount);
         return message;
     }
 
-    public String makeMinusPriceMessage(final BigDecimal totalDiscount, final BigDecimal expectPrice,
+    public String makeTotalPriceMessage(final BigDecimal totalDiscount, final BigDecimal expectPrice,
                                         final Boolean noPromotion) {
         String message = "";
         message += String.format(TOTAL_PROMOTION_PRICE + "\n");
@@ -58,8 +54,12 @@ public class StringFormatter {
         message += String.format(EXPECT_PRICE + "\n");
         message += makeExpectPriceMessage(expectPrice);
         message += String.format(BADGE + "\n");
-        message += makeBadgeMessage(expectPrice, noPromotion);
+        message += makeBadgeMessage(totalDiscount, noPromotion);
         return message;
+    }
+
+    private String makeOptionalOrderMessage(final Order order) {
+        return String.format(FORMAT, order.getMenu().getName(), order.getQuantity().getValue());
     }
 
     private static String makeBadgeMessage(final BigDecimal expectPrice, final Boolean noPromotion) {
@@ -69,12 +69,18 @@ public class StringFormatter {
         return Badge.showName(expectPrice);
     }
 
+    private static String makeSpecialDiscountMessage(final BigDecimal giftDiscount) {
+        if (!giftDiscount.equals(BigDecimal.ZERO)) {
+            return String.format("특별 할인: -%,.0f원\n", giftDiscount);
+        }
+        return "";
+    }
 
     private static String makeGiftDiscountMessage(final BigDecimal giftDiscount) {
         if (!giftDiscount.equals(BigDecimal.ZERO)) {
             return String.format("증정 이벤트: -%,.0f원\n", giftDiscount);
         }
-        return NONE;
+        return "";
     }
 
     private String makeTotalDiscountMessage(final BigDecimal totalDiscount) {
@@ -101,6 +107,9 @@ public class StringFormatter {
 
 
     private String showDayDiscount(final Day visitDay, final BigDecimal dayDiscount) {
+        if (dayDiscount.equals(BigDecimal.ZERO)) {
+            return "";
+        }
         if (visitDay.isWeekend()) {
             return String.format("주말 할인: -%,.0f원\n", dayDiscount);
         }
