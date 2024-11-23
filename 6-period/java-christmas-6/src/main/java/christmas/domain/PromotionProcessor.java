@@ -15,7 +15,7 @@ public class PromotionProcessor {
     }
 
     public boolean checkAtLeastPrice() {
-        return orders.calculateTotalPrice().compareTo(new BigDecimal(100000)) >= 0;
+        return orders.calculateTotalPrice().compareTo(new BigDecimal(10000)) >= 0;
     }
 
     public BigDecimal checkUntiChristmasDiscount() {
