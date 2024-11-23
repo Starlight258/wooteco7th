@@ -6,6 +6,12 @@ import java.util.Optional;
 
 public class PromotionProcessor {
 
+    private static final int MIN_EVENT_APPLY_PRICE = 10_000;
+    private static final int DISCOUNT_START_PRICE = 1_000;
+    private static final int DISCOUNT_DAY_UNIT = 100;
+    private static final int DISCOUNT_PER_MENU = 2023;
+    private static final int MIN_GIFT_PRICE = 120_000;
+
     private final Day visitDay;
     private final Orders orders;
 
@@ -15,15 +21,15 @@ public class PromotionProcessor {
     }
 
     public boolean checkAtLeastPrice() {
-        return orders.calculateTotalPrice().compareTo(new BigDecimal(10_000)) >= 0;
+        return orders.calculateTotalPrice().compareTo(new BigDecimal(MIN_EVENT_APPLY_PRICE)) >= 0;
     }
 
     public BigDecimal checkUntilChristmasDiscount() {
         if (visitDay.isExceedChristmas()) {
             return BigDecimal.ZERO;
         }
-        BigDecimal discount = BigDecimal.valueOf(1000);
-        BigDecimal untilChristmas = new BigDecimal(100).multiply(new BigDecimal(visitDay.diffFromFirstDay()));
+        BigDecimal discount = BigDecimal.valueOf(DISCOUNT_START_PRICE);
+        BigDecimal untilChristmas = new BigDecimal(DISCOUNT_DAY_UNIT).multiply(new BigDecimal(visitDay.diffFromFirstDay()));
         return discount.add(untilChristmas);
     }
 
@@ -35,22 +41,22 @@ public class PromotionProcessor {
     }
 
     private BigDecimal calculateMainMenuDiscount() {
-        return new BigDecimal(2023).multiply(new BigDecimal(orders.countSameTypeMenu(MenuType.MAIN)));
+        return new BigDecimal(DISCOUNT_PER_MENU).multiply(new BigDecimal(orders.countSameTypeMenu(MenuType.MAIN)));
     }
 
     private BigDecimal calculateDessertMenu() {
-        return new BigDecimal(2023).multiply(new BigDecimal(orders.countSameTypeMenu(MenuType.DESSERT)));
+        return new BigDecimal(DISCOUNT_PER_MENU).multiply(new BigDecimal(orders.countSameTypeMenu(MenuType.DESSERT)));
     }
 
     public BigDecimal checkSpecialDiscount() {
         if (visitDay.isSpecialDay()) {
-            return BigDecimal.valueOf(1000);
+            return BigDecimal.valueOf(DISCOUNT_START_PRICE);
         }
         return BigDecimal.ZERO;
     }
 
     public Optional<Order> checkGift() {
-        if (orders.calculateTotalPrice().compareTo(new BigDecimal("120000")) >= 0) {
+        if (orders.calculateTotalPrice().compareTo(new BigDecimal(MIN_GIFT_PRICE)) >= 0) {
             return Optional.of(new Order(Menu.샴페인, new Quantity(1)));
         }
         return Optional.empty();
