@@ -29,21 +29,21 @@ public class Day {
         return now.getDayOfWeek().equals(DayOfWeek.SUNDAY) || value == 25;
     }
 
+    public int diffFromFirstDay() {
+        return value - 1;
+    }
+
+    public boolean isExceedChristmas() {
+        return value > 25;
+    }
+
     private void validate(final int value) {
         if (value < 1 || value > 31) {
             throw new CustomIllegalArgumentException(ErrorMessage.INVALID_DAY.getMessage());
         }
     }
 
-    public int diffFromFirstDay() {
-        return value - 1;
-    }
-
     public int getValue() {
         return value;
-    }
-
-    public boolean isExceedChristmas() {
-        return value > 25;
     }
 }
