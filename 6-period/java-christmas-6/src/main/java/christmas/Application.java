@@ -17,8 +17,6 @@ public class Application {
         Controller controller = new Controller(inputView, outputView, stringFormatter, exceptionHandler);
         try {
             controller.process();
-        } catch (IllegalArgumentException exception) {
-            outputView.showException(exception);
         } finally {
             Console.close();
         }
