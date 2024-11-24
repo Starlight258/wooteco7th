@@ -1,8 +1,8 @@
 package christmas.support;
 
-import static christmas.exception.ErrorMessage.ERROR_PREFIX;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
+import christmas.exception.ErrorPrefix;
 import org.assertj.core.api.AbstractThrowableAssert;
 import org.assertj.core.api.ThrowableAssert;
 
@@ -13,7 +13,7 @@ public class CustomExceptionAssertions {
             ThrowableAssert.ThrowingCallable throwingCallable) {
         return assertThatThrownBy(throwingCallable)
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageStartingWith(ERROR_PREFIX.getMessage());
+                .hasMessageStartingWith(ErrorPrefix.format(""));
     }
 
     // IllegalStateException
@@ -21,6 +21,6 @@ public class CustomExceptionAssertions {
             ThrowableAssert.ThrowingCallable throwingCallable) {
         return assertThatThrownBy(throwingCallable)
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageStartingWith(ERROR_PREFIX.getMessage());
+                .hasMessageStartingWith(ErrorPrefix.format(""));
     }
 }

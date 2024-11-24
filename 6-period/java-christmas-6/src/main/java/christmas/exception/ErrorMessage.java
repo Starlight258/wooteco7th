@@ -2,8 +2,6 @@ package christmas.exception;
 
 public enum ErrorMessage {
 
-    ERROR_PREFIX("[ERROR] "),
-
     NULL("입력값은(는) null일 수 없습니다."),
     BLANK("입력값은(는) 빈 문자열이거나 공백일 수 없습니다."),
 

@@ -25,13 +25,13 @@ public class Orders {
                 .distinct()
                 .count();
         if (uniqueMenuCount != orders.size()) {
-            throw new CustomIllegalArgumentException(ErrorMessage.INVALID_ORDER.getMessage());
+            throw new CustomIllegalArgumentException(ErrorMessage.INVALID_ORDER);
         }
     }
 
     private void checkHasDrinkMenus(final List<Order> orders) {
         if (countDrinkMenu(orders) == countTotalMenu(orders)) {
-            throw new CustomIllegalArgumentException(ErrorMessage.INVALID_ORDER.getMessage());
+            throw new CustomIllegalArgumentException(ErrorMessage.INVALID_ORDER);
         }
     }
 
@@ -41,7 +41,7 @@ public class Orders {
                 .mapToInt(Quantity::getValue)
                 .sum();
         if (size > 20) {
-            throw new CustomIllegalArgumentException(ErrorMessage.INVALID_ORDER.getMessage());
+            throw new CustomIllegalArgumentException(ErrorMessage.INVALID_ORDER);
         }
     }
 

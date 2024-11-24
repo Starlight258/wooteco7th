@@ -2,6 +2,7 @@ package christmas.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import christmas.exception.ErrorMessage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +14,6 @@ class ConverterTest {
         // Given
 
         // When & Then
-        assertThat(Converter.convertToInteger("3")).isEqualTo(3);
+        assertThat(Converter.convertToInteger("3", ErrorMessage.INVALID_DAY)).isEqualTo(3);
     }
 }

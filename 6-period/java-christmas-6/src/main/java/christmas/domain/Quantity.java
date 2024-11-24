@@ -16,7 +16,7 @@ public class Quantity {
 
     private void validate(final int value) {
         if (value < MIN_QUANTITY) {
-            throw new CustomIllegalArgumentException(ErrorMessage.INVALID_ORDER.getMessage());
+            throw new CustomIllegalArgumentException(ErrorMessage.INVALID_ORDER);
         }
     }
 

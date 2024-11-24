@@ -39,7 +39,7 @@ public class Day {
 
     private void validate(final int value) {
         if (value < 1 || value > 31) {
-            throw new CustomIllegalArgumentException(ErrorMessage.INVALID_DAY.getMessage());
+            throw new CustomIllegalArgumentException(ErrorMessage.INVALID_DAY);
         }
     }
 

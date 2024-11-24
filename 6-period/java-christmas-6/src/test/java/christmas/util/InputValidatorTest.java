@@ -2,6 +2,7 @@ package christmas.util;
 
 import static christmas.support.CustomExceptionAssertions.assertCustomIllegalArgumentException;
 
+import christmas.exception.ErrorMessage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -19,8 +20,9 @@ class InputValidatorTest {
             // Given
 
             // When & Then
-            assertCustomIllegalArgumentException(() -> InputValidator.validateNotNullOrBlank(null))
-                    .hasMessageContaining("입력값은(는) null일 수 없습니다.");
+            assertCustomIllegalArgumentException(
+                    () -> InputValidator.validateNotNullOrBlank(null, ErrorMessage.INVALID_DAY))
+                    .hasMessageContaining(ErrorMessage.INVALID_DAY.getMessage());
         }
 
         @Test
@@ -29,8 +31,9 @@ class InputValidatorTest {
             // Given
 
             // When & Then
-            assertCustomIllegalArgumentException(() -> InputValidator.validateNotNullOrBlank(""))
-                    .hasMessageContaining("입력값은(는) 빈 문자열이거나 공백일 수 없습니다.");
+            assertCustomIllegalArgumentException(
+                    () -> InputValidator.validateNotNullOrBlank("", ErrorMessage.INVALID_DAY))
+                    .hasMessageContaining(ErrorMessage.INVALID_DAY.getMessage());
         }
 
         @Test
@@ -39,8 +42,9 @@ class InputValidatorTest {
             // Given
 
             // When & Then
-            assertCustomIllegalArgumentException(() -> InputValidator.validateNotNullOrBlank(" "))
-                    .hasMessageContaining("입력값은(는) 빈 문자열이거나 공백일 수 없습니다.");
+            assertCustomIllegalArgumentException(
+                    () -> InputValidator.validateNotNullOrBlank(" ", ErrorMessage.INVALID_DAY))
+                    .hasMessageContaining(ErrorMessage.INVALID_DAY.getMessage());
         }
     }
 }

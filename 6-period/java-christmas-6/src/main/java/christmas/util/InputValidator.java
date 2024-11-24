@@ -5,12 +5,12 @@ import christmas.exception.ErrorMessage;
 
 public class InputValidator {
 
-    public static void validateNotNullOrBlank(final String input) {
+    public static void validateNotNullOrBlank(final String input, final ErrorMessage message) {
         if (input == null) {
-            throw new CustomIllegalArgumentException(ErrorMessage.NULL.getMessage());
+            throw new CustomIllegalArgumentException(message);
         }
         if (input.isBlank()) {
-            throw new CustomIllegalArgumentException(ErrorMessage.BLANK.getMessage());
+            throw new CustomIllegalArgumentException(message);
         }
     }
 }
