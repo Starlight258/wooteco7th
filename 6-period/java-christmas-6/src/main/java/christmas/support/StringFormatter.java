@@ -9,12 +9,13 @@ import java.util.Optional;
 
 public class StringFormatter {
 
+    private static final String LINE = System.lineSeparator();
     private static final String TOTAL_PROMOTION_PRICE = "<총혜택 금액>";
     private static final String EXPECT_PRICE = "<할인 후 예상 결제 금액>";
     private static final String BADGE = "<12월 이벤트 배지>";
-    private static final String FORMAT = "%s %d개" + System.lineSeparator();
-    public static final String NONE = "없음" + System.lineSeparator();
-    public static final String ZERO_PRICE = "0원" + System.lineSeparator();
+    private static final String FORMAT = "%s %d개" + LINE;
+    private static final String NONE = "없음" + LINE;
+    private static final String ZERO_PRICE = "0원" + LINE;
 
     public String makeOptionalOrderMessage(final Orders orders) {
         StringBuilder message = new StringBuilder();
@@ -59,7 +60,7 @@ public class StringFormatter {
     }
 
     private String makeOptionalOrderMessage(final Order order) {
-        return String.format(FORMAT, order.getMenu().getName(), order.getQuantity().getValue());
+        return String.format(FORMAT, order.getMenu().name(), order.getQuantity().getValue());
     }
 
     private static String makeBadgeMessage(final BigDecimal expectPrice, final Boolean noPromotion) {
