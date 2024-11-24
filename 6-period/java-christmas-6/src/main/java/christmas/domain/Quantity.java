@@ -5,6 +5,8 @@ import christmas.exception.ErrorMessage;
 
 public class Quantity {
 
+    private static final int MIN_QUANTITY = 1;
+
     private final int value;
 
     public Quantity(final int value) {
@@ -13,7 +15,7 @@ public class Quantity {
     }
 
     private void validate(final int value) {
-        if (value < 1 || value > 20) {
+        if (value < MIN_QUANTITY) {
             throw new CustomIllegalArgumentException(ErrorMessage.INVALID_ORDER.getMessage());
         }
     }

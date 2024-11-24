@@ -15,6 +15,7 @@ public class Orders {
     public Orders(final List<Order> orders) {
         checkDuplicated(orders);
         checkHasDrinkMenus(orders);
+        checkIfQuotaIsExceeded(orders);
         this.orders = new ArrayList<>(orders);
     }
 
@@ -30,6 +31,16 @@ public class Orders {
 
     private void checkHasDrinkMenus(final List<Order> orders) {
         if (countDrinkMenu(orders) == countTotalMenu(orders)) {
+            throw new CustomIllegalArgumentException(ErrorMessage.INVALID_ORDER.getMessage());
+        }
+    }
+
+    private void checkIfQuotaIsExceeded(final List<Order> orders) {
+        int size = orders.stream()
+                .map(order -> order.getQuantity())
+                .mapToInt(Quantity::getValue)
+                .sum();
+        if (size > 20) {
             throw new CustomIllegalArgumentException(ErrorMessage.INVALID_ORDER.getMessage());
         }
     }
