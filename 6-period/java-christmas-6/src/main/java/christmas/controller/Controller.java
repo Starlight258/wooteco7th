@@ -4,6 +4,7 @@ import christmas.domain.Day;
 import christmas.domain.Order;
 import christmas.domain.Orders;
 import christmas.domain.PromotionProcessor;
+import christmas.dto.OrderMenuDto;
 import christmas.exception.ExceptionHandler;
 import christmas.service.Service;
 import christmas.support.StringFormatter;
@@ -14,9 +15,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class Controller {
-
-    private static final int YEAR = 2023;
-    private static final int DECEMBER = 12;
 
     private final InputView inputView;
     private final OutputView outputView;
@@ -34,7 +32,7 @@ public class Controller {
     }
 
     public void process() {
-        outputView.commentWelcomeMessage();
+        outputView.informWelcome();
         Day visitDay = createDay();
         Orders orders = createOrders();
         showOrders(orders, visitDay);
@@ -44,9 +42,9 @@ public class Controller {
     private void checkPromotion(final Day visitDay, final Orders orders) {
         PromotionProcessor promotionProcessor = new PromotionProcessor(visitDay, orders);
         Optional<Order> optionalOrder = promotionProcessor.checkGift();
-        outputView.showBonusMenu();
-        outputView.showMessage(stringFormatter.makeOptionalOrderMessage(optionalOrder));
-        outputView.showPromotionList();
+        outputView.informBonusMenu();
+        outputView.show(stringFormatter.makeOptionalOrderMessage(optionalOrder));
+        outputView.informBenefitDetails();
         showDiscount(visitDay, promotionProcessor, optionalOrder);
     }
 
@@ -57,7 +55,7 @@ public class Controller {
         BigDecimal dayDiscount = promotionProcessor.checkDayDiscount();
         BigDecimal specialDiscount = promotionProcessor.checkSpecialDiscount();
         BigDecimal giftDiscount = promotionProcessor.makeGiftDiscount(optionalOrder);
-        outputView.showMessage(
+        outputView.show(
                 stringFormatter.makePromotionListMessage(untilChristmasDiscount, dayDiscount, specialDiscount,
                         giftDiscount, visitDay, noPromotion));
         showTotalDiscount(promotionProcessor, noPromotion, untilChristmasDiscount, dayDiscount, specialDiscount,
@@ -71,7 +69,7 @@ public class Controller {
                 noPromotion);
         BigDecimal discountPriceExceptBonusPrice = totalDiscount.subtract(giftDiscount);
         BigDecimal expectPrice = promotionProcessor.calculateExpectPrice(discountPriceExceptBonusPrice);
-        outputView.showMessage(stringFormatter.makeTotalPriceMessage(totalDiscount, expectPrice, noPromotion));
+        outputView.show(stringFormatter.makeTotalPriceMessage(totalDiscount, expectPrice, noPromotion));
     }
 
     private BigDecimal addTotalDiscount(final BigDecimal untilChristmasDiscount, final BigDecimal dayDiscount,
@@ -88,7 +86,7 @@ public class Controller {
     }
 
     private Orders createOrders() {
-        outputView.commentOrderMenu();
+        outputView.requestOrderMenu();
         return exceptionHandler.retryOn(() -> {
             List<String> orderInputs = inputView.readMenu();
             return service.createOrders(orderInputs);
@@ -97,22 +95,21 @@ public class Controller {
 
     private Day createDay() {
         return exceptionHandler.retryOn(() -> {
-            outputView.commentVisitDate();
+            outputView.requestVisitDay();
             int day = inputView.readDay();
-            return new Day(YEAR, DECEMBER, day);
+            return service.createDay(day);
         });
     }
 
 
     private void showOrders(final Orders orders, final Day day) {
-        outputView.commentEvent(day.getValue());
+        outputView.informPreview(day.getValue());
         showOrderMenus(orders);
-        outputView.showOrderPrice(orders.calculateTotalPrice());
-        outputView.showBlankLine();
+        outputView.informDiscountPrice(orders.calculateTotalPrice());
     }
 
     private void showOrderMenus(final Orders orders) {
-        outputView.showOrderMenu();
-        outputView.showMessage(stringFormatter.makeOptionalOrderMessage(orders));
+        List<OrderMenuDto> orderMenuDtos = service.toOrderMenuDto(orders);
+        outputView.informOrderMenu(orderMenuDtos);
     }
 }
