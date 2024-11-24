@@ -17,14 +17,6 @@ public class StringFormatter {
     private static final String NONE = "없음" + LINE;
     private static final String ZERO_PRICE = "0원" + LINE;
 
-    public String makeOptionalOrderMessage(final Orders orders) {
-        StringBuilder message = new StringBuilder();
-        for (Order order : orders.getOrders()) {
-            message.append(makeOptionalOrderMessage(order));
-        }
-        return message.toString();
-    }
-
     public String makeOptionalOrderMessage(final Optional<Order> optionalOrder) {
         if (optionalOrder.isEmpty()) {
             return NONE;

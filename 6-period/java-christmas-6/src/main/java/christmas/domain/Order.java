@@ -26,6 +26,10 @@ public class Order {
         return menu.getPrice().multiply(new BigDecimal(quantity.getValue()));
     }
 
+    public String getMenuName() {
+        return menu.name();
+    }
+
     public Menu getMenu() {
         return menu;
     }
