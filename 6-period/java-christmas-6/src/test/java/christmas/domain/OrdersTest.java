@@ -52,7 +52,7 @@ class OrdersTest {
         assertThat(orders.checkOnlyDrinks()).isEqualTo(hasOnlyDrink);
     }
 
-    private static Stream<Arguments> 음료_메뉴만있으면_true() {
+    private static Stream<Arguments> 음료_메뉴만있는지_테스트() {
         return Stream.of(
                 Arguments.of(new Orders(List.of(new Order(Menu.샴페인, new Quantity(2)))), true),
                 Arguments.of(new Orders(List.of(new Order(Menu.타파스, new Quantity(2)))), false));
