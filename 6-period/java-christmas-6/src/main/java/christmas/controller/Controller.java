@@ -9,7 +9,6 @@ import christmas.domain.Orders;
 import christmas.domain.PromotionProcessor;
 import christmas.domain.Quantity;
 import christmas.exception.CustomIllegalArgumentException;
-import christmas.exception.ErrorMessage;
 import christmas.exception.ExceptionHandler;
 import christmas.support.StringFormatter;
 import christmas.util.Converter;
@@ -17,6 +16,7 @@ import christmas.view.InputView;
 import christmas.view.OutputView;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -100,15 +100,15 @@ public class Controller {
         outputView.commentOrderMenu();
         return exceptionHandler.retryOn(() -> {
             String input = inputView.readLine();
-            Orders orders = new Orders(new ArrayList<>());
+            List<Order> orders = new ArrayList<>();
             for (String order : input.split(COMMA)) {
                 validateOrder(orders, order.trim());
             }
-            return orders;
+            return new Orders(orders);
         });
     }
 
-    private void validateOrder(final Orders orders, final String order) {
+    private void validateOrder(final List<Order> orders, final String order) {
         Matcher matcher = PATTERN.matcher(order);
         if (!matcher.matches()) {
             throw new CustomIllegalArgumentException(INVALID_ORDER.getMessage());
@@ -118,9 +118,6 @@ public class Controller {
             Menu menu = Menu.from(matcher.group(1));
             Quantity quantity = new Quantity(Converter.convertToInteger(matcher.group(2)));
             orders.add(new Order(menu, quantity));
-        }
-        if (orders.checkOnlyDrinks()) {
-            throw new CustomIllegalArgumentException(ErrorMessage.INVALID_ORDER.getMessage());
         }
     }
 
