@@ -1,31 +1,20 @@
 package christmas.controller;
 
-import static christmas.exception.ErrorMessage.INVALID_ORDER;
-
 import christmas.domain.Day;
-import christmas.domain.Menu;
 import christmas.domain.Order;
 import christmas.domain.Orders;
 import christmas.domain.PromotionProcessor;
-import christmas.domain.Quantity;
-import christmas.exception.CustomIllegalArgumentException;
 import christmas.exception.ExceptionHandler;
+import christmas.service.Service;
 import christmas.support.StringFormatter;
-import christmas.util.Converter;
 import christmas.view.InputView;
 import christmas.view.OutputView;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Controller {
 
-    private static final String ORDER_REGEX = "([ㄱ-ㅎ|ㅏ-ㅣ|가-힣]+)-(\\d+)";
-    private static final String COMMA = ",";
-    private static final Pattern PATTERN = Pattern.compile(ORDER_REGEX);
     private static final int YEAR = 2023;
     private static final int DECEMBER = 12;
 
@@ -33,13 +22,15 @@ public class Controller {
     private final OutputView outputView;
     private final StringFormatter stringFormatter;
     private final ExceptionHandler exceptionHandler;
+    private final Service service;
 
     public Controller(final InputView inputView, final OutputView outputView, final StringFormatter stringFormatter,
-                      final ExceptionHandler exceptionHandler) {
+                      final ExceptionHandler exceptionHandler, final Service service) {
         this.inputView = inputView;
         this.outputView = outputView;
         this.stringFormatter = stringFormatter;
         this.exceptionHandler = exceptionHandler;
+        this.service = service;
     }
 
     public void process() {
@@ -99,33 +90,16 @@ public class Controller {
     private Orders createOrders() {
         outputView.commentOrderMenu();
         return exceptionHandler.retryOn(() -> {
-            String input = inputView.readLine();
-            List<Order> orders = new ArrayList<>();
-            for (String order : input.split(COMMA)) {
-                validateOrder(orders, order.trim());
-            }
-            return new Orders(orders);
+            List<String> orderInputs = inputView.readMenu();
+            return service.createOrders(orderInputs);
         });
-    }
-
-    private void validateOrder(final List<Order> orders, final String order) {
-        Matcher matcher = PATTERN.matcher(order);
-        if (!matcher.matches()) {
-            throw new CustomIllegalArgumentException(INVALID_ORDER.getMessage());
-        }
-        matcher.reset();
-        while (matcher.find()) {
-            Menu menu = Menu.from(matcher.group(1));
-            Quantity quantity = new Quantity(Converter.convertToInteger(matcher.group(2)));
-            orders.add(new Order(menu, quantity));
-        }
     }
 
     private Day createDay() {
         return exceptionHandler.retryOn(() -> {
             outputView.commentVisitDate();
-            String day = inputView.readLine();
-            return new Day(YEAR, DECEMBER, Converter.convertToInteger(day));
+            int day = inputView.readDay();
+            return new Day(YEAR, DECEMBER, day);
         });
     }
 
