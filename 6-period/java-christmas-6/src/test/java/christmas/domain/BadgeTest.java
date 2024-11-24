@@ -26,12 +26,12 @@ class BadgeTest {
     }
 
     @Test
-    void 배지얻기_토끼() {
+    void 배지얻기_트리() {
         // Given
         BigDecimal price = new BigDecimal(10000);
 
         // When & Then
-        assertThat(Badge.showName(price)).isEqualTo("토끼");
+        assertThat(Badge.showName(price)).isEqualTo("트리");
     }
 
     @Test

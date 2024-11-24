@@ -6,7 +6,7 @@ import java.util.Arrays;
 public enum Badge {
 
     별("별", new BigDecimal(5000)),
-    토끼("토끼", new BigDecimal(10000)),
+    트리("트리", new BigDecimal(10000)),
     산타("산타", new BigDecimal(20000));
 
     public static final String NONE = "없음";
