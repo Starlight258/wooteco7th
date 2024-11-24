@@ -2,6 +2,7 @@ package christmas.domain;
 
 import christmas.exception.CustomIllegalArgumentException;
 import christmas.exception.ErrorMessage;
+import java.util.Objects;
 
 public class Quantity {
 
@@ -18,6 +19,23 @@ public class Quantity {
         if (value < MIN_QUANTITY) {
             throw new CustomIllegalArgumentException(ErrorMessage.INVALID_ORDER);
         }
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Quantity quantity = (Quantity) o;
+        return value == quantity.value;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
     }
 
     public int getValue() {

@@ -43,7 +43,7 @@ public class Order {
             return false;
         }
         Order order = (Order) o;
-        return quantity == order.quantity && menu == order.menu;
+        return menu == order.menu && Objects.equals(quantity, order.quantity);
     }
 
     @Override
