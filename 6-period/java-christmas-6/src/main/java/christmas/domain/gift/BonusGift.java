@@ -30,8 +30,10 @@ public class BonusGift implements Gift {
     @Override
     public BigDecimal calculateAmount() {
         BigDecimal price = BigDecimal.ZERO;
-        for (Entry<Menu, Quantity> entry : provideGiftItems().entrySet()) {
-            price = price.add(entry.getKey().getPrice().multiply(BigDecimal.valueOf(entry.getValue().getValue())));
+        if (isApplicable()) {
+            for (Entry<Menu, Quantity> entry : provideGiftItems().entrySet()) {
+                price = price.add(entry.getKey().getPrice().multiply(BigDecimal.valueOf(entry.getValue().getValue())));
+            }
         }
         return price;
     }
