@@ -1,5 +1,8 @@
 package christmas.view;
 
+import christmas.domain.Menu;
+import christmas.dto.BenefitDto;
+import christmas.dto.GiftDto;
 import christmas.dto.OrderMenuDto;
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,9 +21,16 @@ public class OutputView {
     private static final String INFORM_DISCOUNT_PRICE = "<할인 전 총주문 금액>";
     private static final String INFORM_BONUS_MENU = "<증정 메뉴>";
     private static final String INFORM_BENEFIT_DETAILS = "<혜택 내역>";
+    private static final String INFORM_TOTAL_BENEFIT_DETAILS = "<총혜택 금액>";
+    private static final String INFORM_EXPECT_PRICE = "<할인 후 예상 결제 금액>";
+    private static final String INFORM_BADGE = "<12월 이벤트 배지>";
 
     private static final String FORMAT_MENU_COUNT = "%s %d개";
+    private static final String FORMAT_BONUS_COUNT = "%s %d개";
     public static final String FORMAT_PRICE = "%,.0f원";
+    private static final String FORMAT_BENEFIT = "%s: -%,.0f원";
+    public static final String FORMAT_MINUS_PRICE = "-%,.0f원";
+    private static final String ZERO_PRICE = "0원";
 
     public void informWelcome() {
         System.out.println(INFORM_WELCOME);
@@ -36,19 +46,19 @@ public class OutputView {
 
     public void informPreview(int day) {
         String message = String.format(INFORM_PREVIEW, day);
-        show(message + LINE + LINE);
+        showln(message + LINE);
     }
 
     public void informOrderMenu(final List<OrderMenuDto> orderMenuDtos) {
         String message = orderMenuDtos.stream()
                 .map(dto -> String.format(FORMAT_MENU_COUNT, dto.name(), dto.quantity()))
                 .collect(Collectors.joining(LINE));
-        show(INFORM_ORDER_MENU + LINE + message + LINE);
+        showln(INFORM_ORDER_MENU + LINE + message + LINE);
     }
 
     public void informDiscountPrice(final BigDecimal price) {
         String message = String.format(FORMAT_PRICE, price);
-        show(INFORM_DISCOUNT_PRICE + LINE + message + LINE);
+        showln(INFORM_DISCOUNT_PRICE + LINE + message + LINE);
     }
 
     public void informBonusMenu() {
@@ -63,7 +73,52 @@ public class OutputView {
         System.out.println(exception.getMessage());
     }
 
-    public void show(String message) {
+    public void showln(String message) {
         System.out.println(message);
+    }
+
+    public void showBenefit(final List<BenefitDto> benefits) {
+        showln(LINE + INFORM_BENEFIT_DETAILS);
+        if (benefits.isEmpty()) {
+            showln(Menu.없음.name());
+            return;
+        }
+        benefits.stream()
+                .map(dto -> format(FORMAT_BENEFIT, dto.discountName(), dto.price()))
+                .forEach(this::showln);
+    }
+
+    public void showGift(final List<GiftDto> giftDtos) {
+        showln(INFORM_BONUS_MENU);
+        if (giftDtos.isEmpty()) {
+            showln(Menu.없음.name());
+            return;
+        }
+        giftDtos.stream()
+                .map(dto -> format(FORMAT_BONUS_COUNT, dto.name(), dto.quantity()))
+                .forEach(this::showln);
+    }
+
+    public void showTotalBenefitPrice(final BigDecimal totalBenefitPrice) {
+        showln(LINE + INFORM_TOTAL_BENEFIT_DETAILS);
+        if (totalBenefitPrice.equals(BigDecimal.ZERO)) {
+            showln(ZERO_PRICE);
+            return;
+        }
+        showln(format(FORMAT_MINUS_PRICE, totalBenefitPrice));
+    }
+
+    public void showEstimatedPrice(final BigDecimal estimatedPrice) {
+        showln(LINE + INFORM_EXPECT_PRICE);
+        showln(String.format(FORMAT_PRICE, estimatedPrice));
+    }
+
+    public void showBadgeName(final String badgeName) {
+        showln(LINE + INFORM_BADGE);
+        showln(badgeName);
+    }
+
+    private String format(String format, Object... args) {
+        return String.format(format, args);
     }
 }

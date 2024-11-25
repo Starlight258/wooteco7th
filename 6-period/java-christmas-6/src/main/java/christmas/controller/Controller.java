@@ -1,32 +1,31 @@
 package christmas.controller;
 
 import christmas.domain.Day;
-import christmas.domain.Order;
+import christmas.domain.EventCalculator;
 import christmas.domain.Orders;
-import christmas.domain.PromotionProcessor;
+import christmas.domain.discount.Discount;
+import christmas.domain.gift.Gift;
+import christmas.dto.BenefitDto;
+import christmas.dto.GiftDto;
 import christmas.dto.OrderMenuDto;
 import christmas.exception.ExceptionHandler;
 import christmas.service.Service;
-import christmas.support.StringFormatter;
 import christmas.view.InputView;
 import christmas.view.OutputView;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 public class Controller {
 
     private final InputView inputView;
     private final OutputView outputView;
-    private final StringFormatter stringFormatter;
     private final ExceptionHandler exceptionHandler;
     private final Service service;
 
-    public Controller(final InputView inputView, final OutputView outputView, final StringFormatter stringFormatter,
-                      final ExceptionHandler exceptionHandler, final Service service) {
+    public Controller(final InputView inputView, final OutputView outputView, final ExceptionHandler exceptionHandler,
+                      final Service service) {
         this.inputView = inputView;
         this.outputView = outputView;
-        this.stringFormatter = stringFormatter;
         this.exceptionHandler = exceptionHandler;
         this.service = service;
     }
@@ -36,53 +35,45 @@ public class Controller {
         Day visitDay = createDay();
         Orders orders = createOrders();
         showOrders(orders, visitDay);
-        checkPromotion(visitDay, orders);
+        processBenefit(visitDay, orders);
     }
 
-    private void checkPromotion(final Day visitDay, final Orders orders) {
-        PromotionProcessor promotionProcessor = new PromotionProcessor(visitDay, orders);
-        Optional<Order> optionalOrder = promotionProcessor.checkGift();
-        outputView.informBonusMenu();
-        outputView.show(stringFormatter.makeOptionalOrderMessage(optionalOrder));
-        outputView.informBenefitDetails();
-        showDiscount(visitDay, promotionProcessor, optionalOrder);
+    private void processBenefit(final Day visitDay, final Orders orders) {
+        List<Gift> gifts = service.createBonus(visitDay, orders);
+        showGifts(gifts);
+        List<Discount> discounts = service.createDiscount(visitDay, orders);
+        showBenefit(gifts, discounts);
+        EventCalculator calculator = new EventCalculator(discounts, gifts);
+        showFinalResult(calculator, orders);
     }
 
-    private void showDiscount(final Day visitDay, final PromotionProcessor promotionProcessor,
-                              final Optional<Order> optionalOrder) {
-        boolean noPromotion = !promotionProcessor.checkAtLeastPrice();
-        BigDecimal untilChristmasDiscount = promotionProcessor.checkUntilChristmasDiscount();
-        BigDecimal dayDiscount = promotionProcessor.checkDayDiscount();
-        BigDecimal specialDiscount = promotionProcessor.checkSpecialDiscount();
-        BigDecimal giftDiscount = promotionProcessor.makeGiftDiscount(optionalOrder);
-        outputView.show(
-                stringFormatter.makePromotionListMessage(untilChristmasDiscount, dayDiscount, specialDiscount,
-                        giftDiscount, visitDay, noPromotion));
-        showTotalDiscount(promotionProcessor, noPromotion, untilChristmasDiscount, dayDiscount, specialDiscount,
-                giftDiscount);
+    private void showFinalResult(final EventCalculator calculator, final Orders orders) {
+        showBenefitPrice(calculator.calculateTotalBenefitPrice());
+        showEstimatedPrice(calculator.calculateEstimatedPrice(orders));
+        showBadgeName(calculator.getBadgeName());
     }
 
-    private void showTotalDiscount(final PromotionProcessor promotionProcessor, final boolean noPromotion,
-                                   final BigDecimal untilChristmasDiscount, final BigDecimal dayDiscount,
-                                   final BigDecimal specialDiscount, final BigDecimal giftDiscount) {
-        BigDecimal totalDiscount = addTotalDiscount(untilChristmasDiscount, dayDiscount, specialDiscount, giftDiscount,
-                noPromotion);
-        BigDecimal discountPriceExceptBonusPrice = totalDiscount.subtract(giftDiscount);
-        BigDecimal expectPrice = promotionProcessor.calculateExpectPrice(discountPriceExceptBonusPrice);
-        outputView.show(stringFormatter.makeTotalPriceMessage(totalDiscount, expectPrice, noPromotion));
+    private void showBadgeName(final String badgeName) {
+        outputView.showBadgeName(badgeName);
     }
 
-    private BigDecimal addTotalDiscount(final BigDecimal untilChristmasDiscount, final BigDecimal dayDiscount,
-                                        final BigDecimal specialDiscount, final BigDecimal giftDiscount,
-                                        final boolean noPromotion) {
-        if (noPromotion) {
-            return BigDecimal.ZERO;
-        }
-        BigDecimal totalDiscount = untilChristmasDiscount;
-        totalDiscount = totalDiscount.add(dayDiscount);
-        totalDiscount = totalDiscount.add(specialDiscount);
-        totalDiscount = totalDiscount.add(giftDiscount);
-        return totalDiscount;
+    private void showEstimatedPrice(final BigDecimal estimatedPrice) {
+        outputView.showEstimatedPrice(estimatedPrice);
+    }
+
+    private void showBenefitPrice(final BigDecimal totalBenefitPrice) {
+        outputView.showTotalBenefitPrice(totalBenefitPrice);
+    }
+
+
+    private void showBenefit(final List<Gift> gifts, final List<Discount> discounts) {
+        List<BenefitDto> benefitDtos = service.createBenefitDtos(discounts, gifts);
+        outputView.showBenefit(benefitDtos);
+    }
+
+    private void showGifts(final List<Gift> gifts) {
+        List<GiftDto> giftDtos = service.createGiftDtos(gifts);
+        outputView.showGift(giftDtos);
     }
 
     private Orders createOrders() {
