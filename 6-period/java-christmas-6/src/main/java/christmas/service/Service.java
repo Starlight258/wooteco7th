@@ -18,8 +18,10 @@ import christmas.exception.CustomIllegalArgumentException;
 import christmas.exception.ErrorMessage;
 import christmas.util.Converter;
 import christmas.util.StringParser;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -85,7 +87,9 @@ public class Service {
 
     public List<BenefitDto> createBenefitDtos(final List<Discount> discounts, final List<Gift> gifts) {
         return Stream.concat(
-                        discounts.stream().map(discount -> new BenefitDto(discount.getName(), discount.calculateAmount())),
+                        discounts.stream()
+                                .filter(discount -> !Objects.equals(discount.calculateAmount(), BigDecimal.ZERO))
+                                .map(discount -> new BenefitDto(discount.getName(), discount.calculateAmount())),
                         gifts.stream().map(gift -> new BenefitDto(gift.getName(), gift.calculateAmount())))
                 .toList();
     }
