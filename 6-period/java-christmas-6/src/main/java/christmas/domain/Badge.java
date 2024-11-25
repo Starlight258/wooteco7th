@@ -16,10 +16,10 @@ public enum Badge {
         this.minimumValue = atLeastPrice;
     }
 
-    public static String showName(BigDecimal atLeastPrice) {
+    public static String showName(BigDecimal totalPrice) {
         return Arrays.stream(Badge.values())
                 .sorted((v1, v2) -> v2.minimumValue.compareTo(v1.minimumValue))
-                .filter(badge -> atLeastPrice.compareTo(badge.minimumValue) >= 0)
+                .filter(badge -> totalPrice.compareTo(badge.minimumValue) >= 0)
                 .findFirst()
                 .map(Badge::name)
                 .orElse(없음.name());

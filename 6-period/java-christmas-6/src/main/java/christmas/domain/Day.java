@@ -4,8 +4,11 @@ import christmas.exception.CustomIllegalArgumentException;
 import christmas.exception.ErrorMessage;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.Month;
 
 public class Day {
+
+    private static final int CHRISTMAS = 25;
 
     private final int year;
     private final int month;
@@ -20,13 +23,17 @@ public class Day {
     }
 
     public boolean isWeekend() {
-        LocalDate now = LocalDate.of(year, month, value);
+        LocalDate now = toLocalDate();
         return now.getDayOfWeek().equals(DayOfWeek.FRIDAY) || now.getDayOfWeek().equals(DayOfWeek.SATURDAY);
     }
 
+    public boolean isWeekday() {
+        return !isWeekend();
+    }
+
     public boolean isSpecialDay() {
-        LocalDate now = LocalDate.of(year, month, value);
-        return now.getDayOfWeek().equals(DayOfWeek.SUNDAY) || value == 25;
+        LocalDate now = toLocalDate();
+        return now.getDayOfWeek().equals(DayOfWeek.SUNDAY) || value == CHRISTMAS;
     }
 
     public int diffFromFirstDay() {
@@ -34,13 +41,21 @@ public class Day {
     }
 
     public boolean isExceedChristmas() {
-        return value > 25;
+        return value > CHRISTMAS;
+    }
+
+    public boolean isInDecember() {
+        return toLocalDate().getMonth().equals(Month.DECEMBER);
     }
 
     private void validate(final int value) {
         if (value < 1 || value > 31) {
             throw new CustomIllegalArgumentException(ErrorMessage.INVALID_DAY);
         }
+    }
+
+    private LocalDate toLocalDate() {
+        return LocalDate.of(year, month, value);
     }
 
     public int getValue() {

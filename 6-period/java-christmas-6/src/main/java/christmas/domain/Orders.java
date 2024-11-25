@@ -10,12 +10,14 @@ import java.util.List;
 
 public class Orders {
 
+    private static final int MAX_MENU_QUANTITY = 20;
+
     private final List<Order> orders;
 
     public Orders(final List<Order> orders) {
         checkDuplicated(orders);
         checkHasDrinkMenus(orders);
-        checkIfQuotaIsExceeded(orders);
+        checkIfQuotaExceeded(orders);
         this.orders = new ArrayList<>(orders);
     }
 
@@ -35,12 +37,12 @@ public class Orders {
         }
     }
 
-    private void checkIfQuotaIsExceeded(final List<Order> orders) {
+    private void checkIfQuotaExceeded(final List<Order> orders) {
         int size = orders.stream()
-                .map(order -> order.getQuantity())
+                .map(Order::getQuantity)
                 .mapToInt(Quantity::getValue)
                 .sum();
-        if (size > 20) {
+        if (size > MAX_MENU_QUANTITY) {
             throw new CustomIllegalArgumentException(ErrorMessage.INVALID_ORDER);
         }
     }
@@ -77,5 +79,9 @@ public class Orders {
 
     public List<Order> getOrders() {
         return Collections.unmodifiableList(orders);
+    }
+
+    public boolean isTotalPriceOverThan(final BigDecimal compared) {
+        return calculateTotalPrice().compareTo(compared) >= 0;
     }
 }
