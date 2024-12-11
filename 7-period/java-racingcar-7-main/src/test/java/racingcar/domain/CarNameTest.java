@@ -11,6 +11,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import racingcar.fake.ForwardNumberGenerator;
 import racingcar.fake.StopNumberGenerator;
+import racingcar.generator.NumberGenerator;
 
 class CarNameTest {
 
@@ -26,20 +27,20 @@ class CarNameTest {
     }
 
     private Car makeCar(NumberGenerator numberGenerator) {
-        return new Car(numberGenerator, new CarName("밍트"), 0);
+        return new Car(new CarName("밍트"), numberGenerator, 0);
     }
 
     @ParameterizedTest
     @MethodSource
     @DisplayName("차를 정상적으로 움직인다.")
-    void 이동_성공(NumberGenerator generator, int score) {
+    void 이동_성공(NumberGenerator generator, int position) {
         // Given
         Car car = makeCar(generator);
 
         // When & Then
         car.move();
 
-        assertThat(car.getScore()).isEqualTo(score);
+        assertThat(car.getPosition()).isEqualTo(position);
     }
 
     private static Stream<Arguments> 이동_성공() {
@@ -56,6 +57,6 @@ class CarNameTest {
         Car car = makeCar(new ForwardNumberGenerator());
 
         // When & Then
-        assertThat(car.isMatchedScore(0)).isTrue();
+        assertThat(car.hasSamePosition(0)).isTrue();
     }
 }
