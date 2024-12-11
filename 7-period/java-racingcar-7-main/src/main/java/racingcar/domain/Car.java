@@ -5,15 +5,17 @@ import racingcar.generator.NumberGenerator;
 
 public class Car {
 
+    public static final int INITIAL_POSITION = 0;
     private static final int MOVE_THRESHOLD = 4;
+
     private final CarName name;
     private final NumberGenerator numberGenerator;
     private int position;
 
-    public Car(final CarName name, final NumberGenerator numberGenerator, final int position) {
+    public Car(final CarName name, final NumberGenerator numberGenerator) {
         this.name = name;
         this.numberGenerator = numberGenerator;
-        this.position = position;
+        this.position = INITIAL_POSITION;
     }
 
     public void move() {
@@ -42,8 +44,8 @@ public class Car {
         return Objects.hash(name);
     }
 
-    public String getName() {
-        return name.getName();
+    public CarName getName() {
+        return name;
     }
 
     public int getPosition() {

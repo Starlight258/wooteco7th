@@ -13,7 +13,7 @@ public record TotalCarPositionDto(List<CarPositionDto> dtos) {
 
     public record CarPositionDto(String name, int position) {
         public static CarPositionDto of(final Car car) {
-            return new CarPositionDto(car.getName(), car.getPosition());
+            return new CarPositionDto(car.getName().getName(), car.getPosition());
         }
     }
 }

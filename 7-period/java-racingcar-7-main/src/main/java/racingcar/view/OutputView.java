@@ -38,8 +38,8 @@ public class OutputView {
         return HYPEN.repeat(position);
     }
 
-    public void showWinnerResult(final List<String> winners) {
-        showln(format(INFORM_WINNER, makeWinnersMessage(winners)));
+    public void showWinnerResult(final List<String> names) {
+        showln(format(INFORM_WINNER, makeWinnersMessage(names)));
     }
 
     private String makeWinnersMessage(final List<String> winners) {

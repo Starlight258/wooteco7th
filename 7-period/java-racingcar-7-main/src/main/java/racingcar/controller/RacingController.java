@@ -6,6 +6,7 @@ import racingcar.domain.Car;
 import racingcar.domain.CarNames;
 import racingcar.domain.Cars;
 import racingcar.domain.RacingGame;
+import racingcar.dto.CarNameDto;
 import racingcar.dto.TotalCarPositionDto;
 import racingcar.generator.NumberGenerator;
 import racingcar.view.InputView;
@@ -37,7 +38,8 @@ public class RacingController {
     }
 
     private void showResult(final RacingGame game) {
-        outputView.showWinnerResult(game.calculateWinners());
+        CarNameDto carNameDto = CarNameDto.of(game.calculateWinners());
+        outputView.showWinnerResult(carNameDto.names());
     }
 
     private void processRacing(final RacingGame game) {

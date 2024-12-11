@@ -18,13 +18,11 @@ public class RacingGame {
         return cars.getCars();
     }
 
-    public List<String> calculateWinners() {
+    public List<CarName> calculateWinners() {
         return cars.calculateWinners();
     }
 
     public boolean isEnd() {
         return attempt.isZero();
     }
-
-
 }
