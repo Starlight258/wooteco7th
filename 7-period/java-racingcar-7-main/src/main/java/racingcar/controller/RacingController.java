@@ -1,5 +1,9 @@
 package racingcar.controller;
 
+import java.util.List;
+import racingcar.domain.CarNames;
+import racingcar.dto.CarsPositionDto;
+import racingcar.dto.CarsPositionDto.CarPositionDto;
 import racingcar.exception.ExceptionHandler;
 import racingcar.service.RacingService;
 import racingcar.view.InputView;
@@ -21,8 +25,13 @@ public class RacingController {
         this.racingService = racingService;
     }
 
-    public void process(){
+    public void process() {
         //자동차 이름 입력
-        outputView.
+        CarNames carNames = makeCarNames();
+    }
+
+    private CarNames makeCarNames() {
+        outputView.showRequestName();
+        return CarNames.of(inputView.readRequestName());
     }
 }

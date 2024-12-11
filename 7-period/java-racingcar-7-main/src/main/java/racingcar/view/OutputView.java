@@ -1,5 +1,8 @@
 package racingcar.view;
 
+import java.util.List;
+import racingcar.dto.CarsPositionDto;
+
 public class OutputView {
 
     private static final String LINE = System.lineSeparator();
@@ -10,24 +13,31 @@ public class OutputView {
     public static final String INFORM_CAR_POSITION = "%s : %s";
     public static final String INFORM_WINNER = "최종 우승자 : %s";
 
-    // TITLE_ : 제목
-    // REQUEST_ : 요청
-    // INFORM_ : 결과
-
     public void showRequestName() {
         showln(REQUEST_NAME);
     }
 
-    public void showRequestAttempt(){
+    public void showRequestAttempt() {
         showln(REQUEST_ATTEMPT);
     }
 
-    public void showInformResult(){
+    public void showInformResult() {
         showln(INFORM_RESULT);
     }
 
-    public void showCarPosition(){
-        showln(INFORM_CAR_POSITION);
+    public void showCarPosition(final List<CarsPositionDto> dtos) { // 총 시도횟수별 라운드 ->
+        dtos.forEach(this::makeCarPositionMessage);
+    }
+
+    private void makeCarPositionMessage(final CarsPositionDto input) {
+        input.dtos().stream()
+                .map(dto -> format(INFORM_CAR_POSITION, dto.name(), dto.position()))
+                .forEach(this::showln);
+        showln("");
+    }
+
+    public void showInformWinner() {
+        showln(INFORM_WINNER);
     }
 
     public void showException(Exception exception) {

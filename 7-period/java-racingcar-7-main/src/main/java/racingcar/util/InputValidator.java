@@ -1,5 +1,9 @@
 package racingcar.util;
 
+import java.util.regex.Pattern;
+import racingcar.exception.AppException;
+import racingcar.exception.ErrorMessage;
+
 public class InputValidator {
 
     private InputValidator() {
@@ -7,7 +11,7 @@ public class InputValidator {
 
     public static void validateNotNullOrBlank(final String input, final ErrorMessage message) {
         if (input == null || input.isBlank()) {
-            throw new CustomIllegalArgumentException(message);
+            throw new AppException(message);
         }
     }
 

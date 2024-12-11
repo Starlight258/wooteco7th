@@ -1,4 +1,9 @@
 package racingcar.dto;
 
-public record CarPositionDto() {
+import java.util.List;
+
+public record CarsPositionDto(List<CarPositionDto> dtos) {
+
+    public record CarPositionDto(String name, int position) {
+    }
 }

@@ -2,7 +2,7 @@ package racingcar.exception;
 
 public enum ErrorMessage {
 
-    INVALID_(""),
+    INVALID_INPUT("유효한 입력이 아닙니다."),
     ;
 
     private final String message;
