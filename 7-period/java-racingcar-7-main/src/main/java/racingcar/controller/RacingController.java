@@ -5,10 +5,9 @@ import racingcar.domain.Attempt;
 import racingcar.domain.Car;
 import racingcar.domain.CarNames;
 import racingcar.domain.Cars;
-import racingcar.domain.NumberGenerator;
-import racingcar.domain.RaceGame;
+import racingcar.domain.RacingGame;
 import racingcar.dto.TotalCarPositionDto;
-import racingcar.exception.ExceptionHandler;
+import racingcar.generator.NumberGenerator;
 import racingcar.view.InputView;
 import racingcar.view.OutputView;
 
@@ -28,20 +27,20 @@ public class RacingController {
     public void process() {
         Cars cars = makeCars();
         Attempt attempt = makeAttempt();
-        RaceGame game = new RaceGame(cars, attempt);
+        RacingGame game = new RacingGame(cars, attempt);
         processGame(game);
     }
 
-    private void processGame(final RaceGame game) {
+    private void processGame(final RacingGame game) {
         processRacing(game);
         showResult(game);
     }
 
-    private void showResult(final RaceGame game) {
-        outputView.showWinnerResult(game.getWinners());
+    private void showResult(final RacingGame game) {
+        outputView.showWinnerResult(game.calculateWinners());
     }
 
-    private void processRacing(final RaceGame game) {
+    private void processRacing(final RacingGame game) {
         outputView.showInformResult();
         while (shouldContinue(game)) {
             List<Car> racingCars = game.race();
@@ -49,13 +48,13 @@ public class RacingController {
         }
     }
 
-    private boolean shouldContinue(final RaceGame game) {
+    private boolean shouldContinue(final RacingGame game) {
         return !game.isEnd();
     }
 
     private Cars makeCars() {
         CarNames carNames = makeCarNames();
-        return Cars.of(numberGenerator, carNames.getNames());
+        return Cars.of(carNames.getNames(), numberGenerator);
     }
 
     private Attempt makeAttempt() {

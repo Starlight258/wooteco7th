@@ -19,4 +19,8 @@ public class CarName {
             throw new AppException(ErrorMessage.INVALID_INPUT);
         }
     }
+
+    public String getName() {
+        return name;
+    }
 }

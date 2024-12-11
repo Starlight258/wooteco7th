@@ -2,8 +2,8 @@ package racingcar;
 
 import camp.nextstep.edu.missionutils.Console;
 import racingcar.controller.RacingController;
-import racingcar.domain.NumberGenerator;
-import racingcar.domain.RandomNumberGenerator;
+import racingcar.generator.NumberGenerator;
+import racingcar.generator.RandomNumberGenerator;
 import racingcar.view.InputView;
 import racingcar.view.OutputView;
 

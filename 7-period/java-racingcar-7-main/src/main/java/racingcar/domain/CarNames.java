@@ -1,5 +1,6 @@
 package racingcar.domain;
 
+import java.util.Collections;
 import java.util.List;
 import racingcar.exception.AppException;
 import racingcar.exception.ErrorMessage;
@@ -27,5 +28,9 @@ public class CarNames {
 
     private boolean isDuplicated(final List<CarName> names) {
         return names.size() != names.stream().distinct().count();
+    }
+
+    public List<CarName> getNames() {
+        return Collections.unmodifiableList(names);
     }
 }
