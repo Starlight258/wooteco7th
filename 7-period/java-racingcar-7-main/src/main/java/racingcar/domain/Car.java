@@ -2,24 +2,28 @@ package racingcar.domain;
 
 import java.util.Objects;
 import racingcar.generator.NumberGenerator;
+import racingcar.strategy.MovingStrategy;
 
 public class Car {
 
     public static final int INITIAL_POSITION = 0;
-    private static final int MOVE_THRESHOLD = 4;
 
     private final CarName name;
     private final NumberGenerator numberGenerator;
+    private final MovingStrategy movingStrategy;
+
     private int position;
 
-    public Car(final CarName name, final NumberGenerator numberGenerator) {
+    public Car(final CarName name, final NumberGenerator numberGenerator, final MovingStrategy movingStrategy) {
         this.name = name;
         this.numberGenerator = numberGenerator;
+        this.movingStrategy = movingStrategy;
         this.position = INITIAL_POSITION;
     }
 
     public void move() {
-        if (numberGenerator.generate() >= MOVE_THRESHOLD) {
+        int randomValue = numberGenerator.generate();
+        if (movingStrategy.canMove(randomValue)) {
             position++;
         }
     }

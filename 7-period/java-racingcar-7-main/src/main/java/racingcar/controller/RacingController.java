@@ -9,6 +9,7 @@ import racingcar.domain.RacingGame;
 import racingcar.dto.CarNameDto;
 import racingcar.dto.TotalCarPositionDto;
 import racingcar.generator.NumberGenerator;
+import racingcar.strategy.MovingStrategy;
 import racingcar.view.InputView;
 import racingcar.view.OutputView;
 
@@ -17,12 +18,14 @@ public class RacingController {
     private final InputView inputView;
     private final OutputView outputView;
     private final NumberGenerator numberGenerator;
+    private final MovingStrategy movingStrategy;
 
     public RacingController(final InputView inputView, final OutputView outputView,
-                            final NumberGenerator numberGenerator) {
+                            final NumberGenerator numberGenerator, final MovingStrategy movingStrategy) {
         this.inputView = inputView;
         this.outputView = outputView;
         this.numberGenerator = numberGenerator;
+        this.movingStrategy = movingStrategy;
     }
 
     public void process() {
@@ -56,7 +59,7 @@ public class RacingController {
 
     private Cars makeCars() {
         CarNames carNames = makeCarNames();
-        return Cars.of(carNames.getNames(), numberGenerator);
+        return Cars.of(carNames.getNames(), numberGenerator, movingStrategy);
     }
 
     private Attempt makeAttempt() {

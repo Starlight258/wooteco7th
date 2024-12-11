@@ -4,6 +4,7 @@ import camp.nextstep.edu.missionutils.Console;
 import racingcar.controller.RacingController;
 import racingcar.generator.NumberGenerator;
 import racingcar.generator.RandomNumberGenerator;
+import racingcar.strategy.RacingMovingStrategy;
 import racingcar.view.InputView;
 import racingcar.view.OutputView;
 
@@ -21,7 +22,7 @@ public class Application {
         InputView inputView = new InputView();
         OutputView outputView = new OutputView();
         NumberGenerator numberGenerator = new RandomNumberGenerator();
-        return new RacingController(inputView, outputView,
-                numberGenerator);
+        RacingMovingStrategy movingStrategy = new RacingMovingStrategy();
+        return new RacingController(inputView, outputView, numberGenerator, movingStrategy);
     }
 }

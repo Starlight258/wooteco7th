@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import racingcar.exception.ErrorMessage;
 import racingcar.generator.NumberGenerator;
+import racingcar.strategy.MovingStrategy;
 
 public class Cars {
 
@@ -13,9 +14,9 @@ public class Cars {
         this.cars = cars;
     }
 
-    public static Cars of(final List<CarName> values, final NumberGenerator numberGenerator) {
+    public static Cars of(final List<CarName> values, final NumberGenerator numberGenerator, final MovingStrategy movingStrategy) {
         return new Cars(values.stream()
-                .map(carName -> new Car(carName, numberGenerator))
+                .map(carName -> new Car(carName, numberGenerator, movingStrategy))
                 .toList());
     }
 
