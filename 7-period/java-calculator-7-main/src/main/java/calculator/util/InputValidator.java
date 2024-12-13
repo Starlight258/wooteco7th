@@ -1,5 +1,6 @@
 package calculator.util;
 
+import calculator.exception.CustomIllegalArgumentException;
 import calculator.exception.ErrorMessage;
 import java.util.regex.Pattern;
 
