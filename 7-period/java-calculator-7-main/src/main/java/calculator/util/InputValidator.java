@@ -9,8 +9,8 @@ public class InputValidator {
     private InputValidator() {
     }
 
-    public static void validateNotNullOrBlank(final String input, final ErrorMessage message) {
-        if (input == null || input.isBlank()) {
+    public static void validateNotNull(final String input, final ErrorMessage message) {
+        if (input == null) {
             throw new CustomIllegalArgumentException(message);
         }
     }

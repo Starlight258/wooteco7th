@@ -11,6 +11,7 @@ public class NumberParser {
     private static final String COLON = ":";
     private static final String CUSTOM_DELIMITER_REGEX = "\\/\\/(.+?)\\\\n";
     private static final Pattern PATTERN = Pattern.compile(CUSTOM_DELIMITER_REGEX);
+    private static final int ZERO = 0;
 
     private final Delimiters delimiters;
     private String text;
@@ -27,9 +28,16 @@ public class NumberParser {
     public List<Integer> parse() {
         // 커스텀 구분자 선언 확인
         findCustomDelimiter();
+        if (checkIfEmpty()) {
+            return List.of(ZERO);
+        }
         // 기본 구분자 + 커스텀 구분자로 분리
         List<String> tokens = parseByDelimiters();
         return parseToInteger(tokens);
+    }
+
+    private boolean checkIfEmpty() {
+        return text.isEmpty();
     }
 
     private List<Integer> parseToInteger(final List<String> tokens) {

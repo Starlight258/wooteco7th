@@ -10,8 +10,8 @@ public class OutputView {
         showln(REQUEST_TEXT);
     }
 
-    public void showInformResult() {
-        showln(INFORM_RESULT);
+    public void showInformResult(final int total) {
+        showln(format(INFORM_RESULT, total));
     }
 
     public void showException(Exception exception) {
