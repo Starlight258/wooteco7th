@@ -42,7 +42,7 @@ public class NumberParser {
 
     private List<Integer> parseToInteger(final List<String> tokens) {
         return tokens.stream()
-                .map(token -> StringParser.parseToInteger(token, ErrorMessage.INVALID_INPUT_INTEGER))
+                .map(token -> StringParser.parseToInteger(token, ErrorMessage.INVALID_INTEGER_FORMAT))
                 .toList();
     }
 

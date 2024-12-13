@@ -21,7 +21,7 @@ public class Delimiters {
 
     private void validate(final List<String> delimiters) {
         if (delimiters.size() != delimiters.stream().distinct().count()) {
-            throw new CustomIllegalArgumentException(ErrorMessage.INVALID_DELIMITER_DUPLICATED);
+            throw new CustomIllegalArgumentException(ErrorMessage.DUPLICATE_DELIMITER);
         }
     }
 

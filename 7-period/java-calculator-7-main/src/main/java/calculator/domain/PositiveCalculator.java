@@ -16,7 +16,7 @@ public class PositiveCalculator {
     private void validatePositive(final List<Integer> numbers) {
         if (numbers.stream()
                 .anyMatch(number -> number <= 0)){
-            throw new CustomIllegalArgumentException(ErrorMessage.NOT_POSITIVE_NUMBER);
+            throw new CustomIllegalArgumentException(ErrorMessage.NON_POSITIVE_NUMBER);
         };
     }
 }
