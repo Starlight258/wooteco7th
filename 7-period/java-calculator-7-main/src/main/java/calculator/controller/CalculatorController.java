@@ -1,10 +1,9 @@
 package calculator.controller;
 
-import calculator.domain.Calculator;
+import calculator.domain.PositiveCalculator;
 import calculator.domain.NumberParser;
 import calculator.view.InputView;
 import calculator.view.OutputView;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CalculatorController {
@@ -24,7 +23,7 @@ public class CalculatorController {
     }
 
     private List<Integer> parse(final String text) {
-        NumberParser numberParser = new NumberParser(text, new ArrayList<>());
+        NumberParser numberParser = new NumberParser(text);
         return numberParser.parse();
     }
 
@@ -34,8 +33,8 @@ public class CalculatorController {
     }
 
     private void showTotal(final List<Integer> tokens) {
-        Calculator calculator = new Calculator();
-        int total = calculator.add(tokens);
+        PositiveCalculator positiveCalculator = new PositiveCalculator();
+        int total = positiveCalculator.add(tokens);
         outputView.showInformResult(total);
     }
 

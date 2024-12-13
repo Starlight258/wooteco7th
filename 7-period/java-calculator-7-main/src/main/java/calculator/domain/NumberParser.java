@@ -16,13 +16,9 @@ public class NumberParser {
     private final Delimiters delimiters;
     private String text;
 
-    public NumberParser(final String text, final List<String> delimiters) {
+    public NumberParser(final String text) {
         this.text = text;
         this.delimiters = initialize();
-    }
-
-    private Delimiters initialize() {
-        return new Delimiters(List.of(COMMA, COLON));
     }
 
     public List<Integer> parse() {
@@ -34,6 +30,10 @@ public class NumberParser {
         // 기본 구분자 + 커스텀 구분자로 분리
         List<String> tokens = parseByDelimiters();
         return parseToInteger(tokens);
+    }
+
+    private Delimiters initialize() {
+        return new Delimiters(List.of(COMMA, COLON));
     }
 
     private boolean checkIfEmpty() {
